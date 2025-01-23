@@ -1,0 +1,44 @@
+name: Django CI
+
+on:
+  push:
+    branches:
+      - main  # Replace with your branch name, if different
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout your code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'  # Adjust based on your Python version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r todo_project/requirements.txt  
+
+      # Step 4: Set up environment variables (use GitHub Secrets)
+      - name: Set up environment variables
+        run: |
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+          echo "DJANGO_SETTINGS_MODULE=todo_project.settings" >> $GITHUB_ENV
+
+      # Step 5: Run migrations
+      - name: Run migrations
+        run: python todo_project/manage.py migrate  # Corrected path to manage.py
+
+      # Step 6: Run tests
+      - name: Run tests
+        run: python todo_project/manage.py test todo_project/todos/tests.py  # Corrected path to test file
