@@ -41,4 +41,4 @@ jobs:
 
       # Step 6: Run tests
       - name: Run tests
-        run: python todo_project/manage.py test todo_project.todos.tests  # Corrected path to test file
+        run: python todo_project/manage.py test todos.tests  # Corrected path to test file
